@@ -60,17 +60,17 @@ class TrainerLRFinderMixin(ABC):
         # TODO: log lr.results to self.logger
         if isinstance(self.auto_lr_find, str):
             # Try to find requested field, may be nested
-            if _nested_hasattr(model, self.auto_lr_find):
-                _nested_setattr(model, self.auto_lr_find, lr)
+            if _nested_hasattr(model.hparams, self.auto_lr_find):
+                _nested_setattr(model.hparams, self.auto_lr_find, lr)
             else:
                 raise MisconfigurationException(
                     f'`auto_lr_find` was set to {self.auto_lr_find}, however'
                     ' could not find this as a field in `model.hparams`.')
         else:
-            if hasattr(model, 'lr'):
-                model.lr = lr
-            elif hasattr(model, 'learning_rate'):
-                model.learning_rate = lr
+            if hasattr(model.hparams, 'lr'):
+                model.hparams.lr = lr
+            elif hasattr(model.hparams, 'learning_rate'):
+                model.hparams.learning_rate = lr
             else:
                 raise MisconfigurationException(
                     'When auto_lr_find is set to True, expects that hparams'
